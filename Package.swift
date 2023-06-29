@@ -20,6 +20,7 @@ let package = Package(
         .package(path: "../Additive"),
         .package(path: "../Logger"),
         .package(path: "../ChatDTO"),
+        .package(path: "../ChatCore"),
         .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.0.0"),
     ],
     targets: [
@@ -29,6 +30,7 @@ let package = Package(
                 "Additive",
                 "Logger",
                 "ChatDTO",
+                "ChatCore",
             ]
         ),
         .testTarget(
