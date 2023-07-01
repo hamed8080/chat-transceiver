@@ -5,12 +5,6 @@
 // Created by Hamed Hosseini on 12/14/22
 
 import Foundation
-import Logger
-
-public protocol TransceiverDelegate: AnyObject {
-    func onDownload(event: DownloadEventTypes)
-    func onUpload(event: UploadEventTypes)
-}
 
 final class ProgressImplementation: NSObject, URLSessionDataDelegate, URLSessionTaskDelegate {
     private let uploadProgress: UploadFileProgressType?
@@ -20,19 +14,13 @@ final class ProgressImplementation: NSObject, URLSessionDataDelegate, URLSession
     private var downloadFileProgress = DownloadFileProgress(percent: 0, totalSize: 0, bytesRecivied: 0)
     private var response: HTTPURLResponse?
     private var uniqueId: String
-    private weak var delegate: TransceiverDelegate?
-    private var logger: Logger?
 
-    init(delegate: TransceiverDelegate? = nil,
-         logger: Logger? = nil,
-         uniqueId: String,
+    init(uniqueId: String,
          uploadProgress: UploadFileProgressType? = nil,
          downloadProgress: DownloadProgressType? = nil,
          downloadCompletion: ((Data?, HTTPURLResponse?, Error?) -> Void)? = nil)
     {
         self.uniqueId = uniqueId
-        self.delegate = delegate
-        self.logger = logger
         self.uploadProgress = uploadProgress
         self.downloadProgress = downloadProgress
         self.downloadCompletion = downloadCompletion
@@ -42,12 +30,10 @@ final class ProgressImplementation: NSObject, URLSessionDataDelegate, URLSession
 
     func urlSession(_: URLSession, task _: URLSessionTask, didSendBodyData _: Int64, totalBytesSent: Int64, totalBytesExpectedToSend: Int64) {
         let percent = (Float(totalBytesSent) / Float(totalBytesExpectedToSend)) * 100
-        logger?.log(title: "Upload progress:\(percent)", persist: false, type: .internalLog)
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             let uploadProgress = UploadFileProgress(percent: Int64(percent), totalSize: totalBytesExpectedToSend, bytesSend: totalBytesSent)
             self.uploadProgress?(uploadProgress, nil)
-            self.delegate?.onUpload(event: .progress(uniqueId, uploadProgress, nil))
         }
     }
 
@@ -59,11 +45,8 @@ final class ProgressImplementation: NSObject, URLSessionDataDelegate, URLSession
         self.response = response as? HTTPURLResponse
         let totalSize = response.expectedContentLength
         downloadFileProgress.totalSize = totalSize
-        downloadProgress?(downloadFileProgress)
-        logger?.log(title: "Download progress:\(downloadFileProgress.percent)", persist: false, type: .internalLog)
         completionHandler(.allow)
-        let progress = DownloadFileProgress(percent: 0, totalSize: totalSize, bytesRecivied: 0)
-        delegate?.onDownload(event: .progress(uniqueId: uniqueId, progress: progress))
+        self.downloadProgress?(downloadFileProgress)
     }
 
     func urlSession(_: URLSession, dataTask _: URLSessionDataTask, didReceive data: Data) {

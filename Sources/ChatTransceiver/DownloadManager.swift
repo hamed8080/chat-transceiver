@@ -6,15 +6,12 @@
 
 import Additive
 import Foundation
+import Mocks
 
 public final class DownloadManager {
-    private weak var delegate: TransceiverDelegate?
+    public init() {}
 
-    public init(delegate: TransceiverDelegate) {
-        self.delegate = delegate
-    }
-
-    public func download(_ params: DownloadManagerParameters, progress: DownloadProgressType? = nil, completion: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionTask? {
+    public func download(_ params: DownloadManagerParameters, progress: DownloadProgressType? = nil, completion: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTaskProtocol? {
         var request = URLRequest(url: params.url)
         params.headers?.forEach { key, value in
             request.addValue(value, forHTTPHeaderField: key)

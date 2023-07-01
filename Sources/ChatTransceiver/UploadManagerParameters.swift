@@ -6,7 +6,6 @@
 
 import ChatDTO
 import Foundation
-import Logger
 import ChatCore
 
 public struct UploadManagerParameters {

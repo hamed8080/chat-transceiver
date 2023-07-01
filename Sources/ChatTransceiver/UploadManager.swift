@@ -8,10 +8,7 @@ import Foundation
 import Logger
 
 public final class UploadManager {
-    private weak var delegate: TransceiverDelegate?
-
-    public init(delegate: TransceiverDelegate) {
-        self.delegate = delegate
+    public init() {
     }
 
     public func upload(_ req: UploadManagerParameters, _ data: Data, progress: UploadFileProgressType? = nil, completion: ((Data?, URLResponse?, Error?) -> Void)? = nil) -> URLSessionTask? {
