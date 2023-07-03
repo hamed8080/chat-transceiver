@@ -7,7 +7,7 @@
 import Foundation
 
 final class ProgressImplementation: NSObject, URLSessionDataDelegate, URLSessionTaskDelegate {
-    private let uploadProgress: UploadFileProgressType?
+    private let uploadProgress: UploadProgressType?
     private let downloadProgress: DownloadProgressType?
     private var buffer: NSMutableData = .init()
     private var downloadCompletion: ((Data?, HTTPURLResponse?, Error?) -> Void)?
@@ -16,7 +16,7 @@ final class ProgressImplementation: NSObject, URLSessionDataDelegate, URLSession
     private var uniqueId: String
 
     init(uniqueId: String,
-         uploadProgress: UploadFileProgressType? = nil,
+         uploadProgress: UploadProgressType? = nil,
          downloadProgress: DownloadProgressType? = nil,
          downloadCompletion: ((Data?, HTTPURLResponse?, Error?) -> Void)? = nil)
     {
@@ -33,7 +33,7 @@ final class ProgressImplementation: NSObject, URLSessionDataDelegate, URLSession
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             let uploadProgress = UploadFileProgress(percent: Int64(percent), totalSize: totalBytesExpectedToSend, bytesSend: totalBytesSent)
-            self.uploadProgress?(uploadProgress, nil)
+            self.uploadProgress?(uploadProgress)
         }
     }
 

@@ -5,13 +5,14 @@
 // Created by Hamed Hosseini on 12/14/22
 
 import Foundation
-import Logger
+import Additive
+import Mocks
 
 public final class UploadManager {
     public init() {
     }
 
-    public func upload(_ req: UploadManagerParameters, _ data: Data, progress: UploadFileProgressType? = nil, completion: ((Data?, URLResponse?, Error?) -> Void)? = nil) -> URLSessionTask? {
+    public func upload(_ req: UploadManagerParameters, _ data: Data, _ urlSession: URLSessionProtocol? = nil, progress: UploadProgressType? = nil, completion: ((Data?, URLResponse?, Error?) -> Void)? = nil) -> URLSessionDataTaskProtocol? {
         guard let url = URL(string: req.url) else { return nil }
         var request = URLRequest(url: url)
         let boundary = "Boundary-\(UUID().uuidString)"
@@ -22,11 +23,14 @@ public final class UploadManager {
         request.method = .post
         request.addValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
         let delegate = ProgressImplementation(uniqueId: req.uniqueId, uploadProgress: progress)
-        let session = URLSession(configuration: .default, delegate: delegate, delegateQueue: nil)
-        let uploadTask = session.uploadTask(with: request, from: body as Data) { data, response, error in
+        let session = urlSession ?? URLSession(configuration: .default, delegate: delegate, delegateQueue: nil)
+        let uploadTask = session.uploadTask(request, body as Data) { data, response, error in
             DispatchQueue.main.async {
                 completion?(data, response, error)
             }
+        }
+        if let mock = session as? MockURLSession {
+            mock.delegate = delegate
         }
         uploadTask.resume()
         return uploadTask

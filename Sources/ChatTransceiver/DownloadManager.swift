@@ -11,9 +11,12 @@ import Mocks
 public final class DownloadManager {
     public init() {}
 
-    public func download(_ params: DownloadManagerParameters, progress: DownloadProgressType? = nil, completion: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTaskProtocol? {
+    public func download(_ params: DownloadManagerParameters,
+                         _ urlSession: URLSessionProtocol? = nil,
+                         progress: DownloadProgressType? = nil,
+                         completion: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTaskProtocol? {
         var request = URLRequest(url: params.url)
-        params.headers?.forEach { key, value in
+        params.headers.forEach { key, value in
             request.addValue(value, forHTTPHeaderField: key)
         }
         if let parameters = params.params, parameters.count > 0, params.method == .get {
@@ -25,13 +28,12 @@ public final class DownloadManager {
             request.url = urlComp.url
         }
         request.method = params.method
-        let delegate = ProgressImplementation(uniqueId: params.uniqueId, downloadProgress: progress) { data, response, error in
-            DispatchQueue.main.async {
-                completion(data, response, error)
-            }
+        let delegate = ProgressImplementation(uniqueId: params.uniqueId, downloadProgress: progress, downloadCompletion: completion)
+        let session = urlSession ?? URLSession(configuration: .default, delegate: delegate, delegateQueue: .main)
+        if let mock = urlSession as? MockURLSession {
+            mock.delegate = delegate
         }
-        let session = URLSession(configuration: .default, delegate: delegate, delegateQueue: .main)
-        let downloadTask = session.dataTask(with: request)
+        let downloadTask = session.dataTask(request)
         downloadTask.resume()
         return downloadTask
     }

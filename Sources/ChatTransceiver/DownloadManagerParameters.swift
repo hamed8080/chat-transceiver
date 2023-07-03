@@ -11,7 +11,7 @@ public struct DownloadManagerParameters {
     public var forceToDownload: Bool = false
     public let url: URL
     public let token: String
-    public var headers: [String: String]? { ["Authorization": "Bearer \(token)"] }
+    public var headers: [String: String]
     public var params: [String: Any]?
     public let isImage: Bool
     public let thumbnail: Bool
@@ -23,6 +23,7 @@ public struct DownloadManagerParameters {
                 url: URL,
                 token: String,
                 params: [String: Any]? = nil,
+                headers: [String: String] = [:],
                 thumbnail: Bool = false,
                 hashCode: String? = nil,
                 isImage: Bool = false,
@@ -37,5 +38,7 @@ public struct DownloadManagerParameters {
         self.method = method
         self.uniqueId = uniqueId
         self.thumbnail = thumbnail
+        self.headers = headers
+        self.headers["Authorization"] = "Bearer \(token)"
     }
 }
