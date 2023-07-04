@@ -17,6 +17,7 @@ public final class UploadManager {
         var request = URLRequest(url: url)
         let boundary = "Boundary-\(UUID().uuidString)"
         let body = multipartFormDatas(req, data, boundary: boundary)
+        request.httpBody = body as Data
         req.headers.forEach { key, value in
             request.addValue(value, forHTTPHeaderField: key)
         }
@@ -24,7 +25,7 @@ public final class UploadManager {
         request.addValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
         let delegate = ProgressImplementation(uniqueId: req.uniqueId, uploadProgress: progress)
         let session = urlSession ?? URLSession(configuration: .default, delegate: delegate, delegateQueue: nil)
-        let uploadTask = session.uploadTask(request, body as Data) { data, response, error in
+        let uploadTask = session.uploadTask(request) { data, response, error in
             DispatchQueue.main.async {
                 completion?(data, response, error)
             }
