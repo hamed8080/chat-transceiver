@@ -30,11 +30,8 @@ final class ProgressImplementation: NSObject, URLSessionDataDelegate, URLSession
 
     func urlSession(_: URLSession, task _: URLSessionTask, didSendBodyData _: Int64, totalBytesSent: Int64, totalBytesExpectedToSend: Int64) {
         let percent = (Float(totalBytesSent) / Float(totalBytesExpectedToSend)) * 100
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            let uploadProgress = UploadFileProgress(percent: Int64(percent), totalSize: totalBytesExpectedToSend, bytesSend: totalBytesSent)
-            self.uploadProgress?(uploadProgress)
-        }
+        let uploadProgress = UploadFileProgress(percent: Int64(percent), totalSize: totalBytesExpectedToSend, bytesSend: totalBytesSent)
+        self.uploadProgress?(uploadProgress)
     }
 
     // MARK: - END Upload progress Delegates

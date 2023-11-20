@@ -26,9 +26,7 @@ public final class UploadManager {
         let delegate = ProgressImplementation(uniqueId: req.uniqueId, uploadProgress: progress)
         let session = urlSession ?? URLSession(configuration: .default, delegate: delegate, delegateQueue: nil)
         let uploadTask = session.uploadTask(request) { data, response, error in
-            DispatchQueue.main.async {
-                completion?(data, response, error)
-            }
+            completion?(data, response, error)
         }
         if let mock = session as? MockURLSession {
             mock.delegate = delegate
