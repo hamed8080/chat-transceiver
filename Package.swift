@@ -17,27 +17,26 @@ let package = Package(
             targets: ["ChatTransceiver"]),
     ],
     dependencies: [
-        .package(path: "../ChatDTO"),
-        .package(path: "../Additive"),
-        .package(path: "../Mocks"),
+        .package(url: "https://pubgi.fanapsoft.ir/chat/ios/chat-dto", from: "2.0.0"),
+        .package(url: "https://pubgi.fanapsoft.ir/chat/ios/additive", from: "1.2.0"),
+        .package(url: "https://pubgi.fanapsoft.ir/chat/ios/mocks", from: "1.2.0"),
         .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.0.0"),
     ],
     targets: [
         .target(
             name: "ChatTransceiver",
             dependencies: [
-                "ChatDTO",
-                "Additive",
-                "Mocks",
+                .product(name: "ChatDTO", package: "chat-dto"),
+                .product(name: "Additive", package: "additive"),
             ]
         ),
         .testTarget(
             name: "ChatTransceiverTests",
             dependencies: [
                 "ChatTransceiver",
-                "ChatDTO",
-                "Additive",
-                "Mocks",
+                .product(name: "ChatDTO", package: "chat-dto"),
+                .product(name: "Additive", package: "additive"),
+                .product(name: "Mocks", package: "mocks"),
             ],
             resources: []
         ),

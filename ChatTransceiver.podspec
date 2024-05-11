@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "ChatTransceiver"
-  s.version      = "1.0.2"
+  s.version      = "2.0.0"
   s.summary      = "ChatTransceiver"
   s.description  = "The ChatTransceiver allows for the seamless transfer of files to and from chat servers and podspace. It enables users to download and upload files with ease, making file sharing a hassle-free experience."
   s.homepage     = "https://pubgi.fanapsoft.ir/chat/ios/chat-transceiver"
@@ -11,5 +11,6 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://pubgi.fanapsoft.ir/chat/ios/chat-transceiver", :tag => s.version }
   s.source_files = "Sources/ChatTransceiver/**/*.{h,swift,xcdatamodeld,m,momd}"
   s.frameworks  = "Foundation", "CoreServices"
-  s.dependency "ChatModels" , '1.0.2'
+  s.dependency "ChatDTO" , '2.0.0'
+  s.dependency "Additive" , '1.2.0'
 end

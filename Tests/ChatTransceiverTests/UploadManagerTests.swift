@@ -27,7 +27,7 @@ final class UploadManagerTests: XCTestCase {
     func test_whenUploadWithHeader_requestContainHeader() {
 
         let exp = expectation(description: "Expected the header contains greater than zero.")
-        _ = sut.upload(fileParams(), nil, Data())
+        _ = sut.upload(fileParams(), Data())
         wait(for: [exp], timeout: 1)
     }
 
