@@ -17,26 +17,26 @@ let package = Package(
             targets: ["ChatTransceiver"]),
     ],
     dependencies: [
-        .package(url: "https://pubgi.sandpod.ir/chat/ios/chat-dto", from: "2.0.1"),
-        .package(url: "https://pubgi.sandpod.ir/chat/ios/additive", from: "1.2.1"),
-        .package(url: "https://pubgi.sandpod.ir/chat/ios/mocks", from: "1.2.1"),
+        .package(path: "../ChatDTO"),
+        .package(path: "../Additive"),
+        .package(path: "../Mocks"),
         .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.0.0"),
     ],
     targets: [
         .target(
             name: "ChatTransceiver",
             dependencies: [
-                .product(name: "ChatDTO", package: "chat-dto"),
-                .product(name: "Additive", package: "additive"),
+                .product(name: "ChatDTO", package: "ChatDTO"),
+                .product(name: "Additive", package: "Additive"),
             ]
         ),
         .testTarget(
             name: "ChatTransceiverTests",
             dependencies: [
                 "ChatTransceiver",
-                .product(name: "ChatDTO", package: "chat-dto"),
-                .product(name: "Additive", package: "additive"),
-                .product(name: "Mocks", package: "mocks"),
+                .product(name: "ChatDTO", package: "ChatDTO"),
+                .product(name: "Additive", package: "Additive"),
+                .product(name: "Mocks", package: "Mocks"),
             ],
             resources: []
         ),
