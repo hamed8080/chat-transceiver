@@ -17,6 +17,8 @@ public struct DownloadManagerParameters {
     public let thumbnail: Bool
     public var hashCode: String?
     public var method: HTTPMethod = .get
+    public var conversationId: Int?
+    public var typeCodeIndex: Int
     public var uniqueId: String
 
     public init(forceToDownload: Bool = false,
@@ -28,6 +30,8 @@ public struct DownloadManagerParameters {
                 hashCode: String? = nil,
                 isImage: Bool = false,
                 method: HTTPMethod = .get,
+                conversationId: Int? = nil,
+                typeCodeIndex: Int = 0,
                 uniqueId: String) {
         self.forceToDownload = forceToDownload
         self.url = url
@@ -39,6 +43,8 @@ public struct DownloadManagerParameters {
         self.uniqueId = uniqueId
         self.thumbnail = thumbnail
         self.headers = headers
+        self.conversationId = conversationId
+        self.typeCodeIndex = typeCodeIndex
         self.headers["Authorization"] = "Bearer \(token)"
     }
 }
