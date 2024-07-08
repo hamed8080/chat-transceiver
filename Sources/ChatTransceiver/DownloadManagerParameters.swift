@@ -7,7 +7,7 @@
 import Additive
 import Foundation
 
-public struct DownloadManagerParameters {
+public struct DownloadManagerParameters: CustomDebugStringConvertible {
     public var forceToDownload: Bool = false
     public let url: URL
     public let token: String
@@ -47,4 +47,22 @@ public struct DownloadManagerParameters {
         self.typeCodeIndex = typeCodeIndex
         self.headers["Authorization"] = "Bearer \(token)"
     }
+
+    public var debugDescription: String {
+        """
+        forceToDownload: \(forceToDownload),
+        url: \(url.absoluteString),
+        token: \(token),
+        headers: \(headers),
+        params: \(params),
+        isImage: \(isImage),
+        thumbnail: \(thumbnail),
+        hashCode: \(hashCode),
+        method: \(method),
+        conversationId: \(conversationId),
+        typeCodeIndex: \(typeCodeIndex),
+        uniqueId: \(uniqueId),
+        """
+    }
+
 }
