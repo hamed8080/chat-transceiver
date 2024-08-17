@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "ChatTransceiver"
-  s.version      = "2.1.0"
+  s.version      = "2.2.0"
   s.summary      = "ChatTransceiver"
   s.description  = "The ChatTransceiver allows for the seamless transfer of files to and from chat servers and podspace. It enables users to download and upload files with ease, making file sharing a hassle-free experience."
   s.homepage     = "https://pubgi.sandpod.ir/chat/ios/chat-transceiver"
