@@ -6,7 +6,7 @@
 
 import Foundation
 
-final class ProgressImplementation: NSObject, URLSessionDataDelegate, URLSessionTaskDelegate {
+public final class ProgressImplementation: NSObject, URLSessionDataDelegate, URLSessionTaskDelegate {
     private let uploadProgress: UploadProgressType?
     private let downloadProgress: DownloadProgressType?
     private var buffer: NSMutableData = .init()
@@ -15,7 +15,7 @@ final class ProgressImplementation: NSObject, URLSessionDataDelegate, URLSession
     private var response: HTTPURLResponse?
     private var uniqueId: String
 
-    init(uniqueId: String,
+    public init(uniqueId: String,
          uploadProgress: UploadProgressType? = nil,
          downloadProgress: DownloadProgressType? = nil,
          downloadCompletion: ((Data?, HTTPURLResponse?, Error?) -> Void)? = nil)
@@ -28,7 +28,7 @@ final class ProgressImplementation: NSObject, URLSessionDataDelegate, URLSession
 
     // MARK: - Upload progress Delegates
 
-    func urlSession(_: URLSession, task _: URLSessionTask, didSendBodyData _: Int64, totalBytesSent: Int64, totalBytesExpectedToSend: Int64) {
+    public func urlSession(_: URLSession, task _: URLSessionTask, didSendBodyData _: Int64, totalBytesSent: Int64, totalBytesExpectedToSend: Int64) {
         let percent = (Float(totalBytesSent) / Float(totalBytesExpectedToSend)) * 100
         let uploadProgress = UploadFileProgress(percent: Int64(percent), totalSize: totalBytesExpectedToSend, bytesSend: totalBytesSent)
         self.uploadProgress?(uploadProgress)
@@ -38,7 +38,7 @@ final class ProgressImplementation: NSObject, URLSessionDataDelegate, URLSession
 
     // MARK: - Download progress Delegates
 
-    func urlSession(_: URLSession, dataTask _: URLSessionDataTask, didReceive response: URLResponse, completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
+    public func urlSession(_: URLSession, dataTask _: URLSessionDataTask, didReceive response: URLResponse, completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
         self.response = response as? HTTPURLResponse
         let totalSize = response.expectedContentLength
         downloadFileProgress.totalSize = totalSize
@@ -46,7 +46,7 @@ final class ProgressImplementation: NSObject, URLSessionDataDelegate, URLSession
         self.downloadProgress?(downloadFileProgress)
     }
 
-    func urlSession(_: URLSession, dataTask _: URLSessionDataTask, didReceive data: Data) {
+    public func urlSession(_: URLSession, dataTask _: URLSessionDataTask, didReceive data: Data) {
         buffer.append(data)
 
         let percentageDownloaded: Double
@@ -60,7 +60,7 @@ final class ProgressImplementation: NSObject, URLSessionDataDelegate, URLSession
         downloadProgress?(downloadFileProgress)
     }
 
-    func urlSession(_: URLSession, task _: URLSessionTask, didCompleteWithError error: Error?) {
+    public func urlSession(_: URLSession, task _: URLSessionTask, didCompleteWithError error: Error?) {
         guard let url = response?.url else { return }
         let headers = response?.allHeaderFields as? [String: String] ?? [:]
         let resultResponse = HTTPURLResponse(url: url, statusCode: error == nil ? 200 : 400, httpVersion: "HTTP/1.1", headerFields: headers)

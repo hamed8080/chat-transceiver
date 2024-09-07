@@ -12,7 +12,7 @@ public final class UploadManager {
     public init() {
     }
 
-    public func upload(_ req: UploadManagerParameters, _ data: Data, _ urlSession: URLSessionProtocol? = nil, progress: UploadProgressType? = nil, completion: ((Data?, URLResponse?, Error?) -> Void)? = nil) -> URLSessionDataTaskProtocol? {
+    public func upload(_ req: UploadManagerParameters, _ data: Data, _ urlSession: URLSessionProtocol, completion: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTaskProtocol? {
         guard let url = URL(string: req.url) else { return nil }
         var request = URLRequest(url: url)
         let boundary = "Boundary-\(UUID().uuidString)"
@@ -23,14 +23,7 @@ public final class UploadManager {
         }
         request.method = .post
         request.addValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-        let delegate = ProgressImplementation(uniqueId: req.uniqueId, uploadProgress: progress)
-        let session = urlSession ?? URLSession(configuration: .default, delegate: delegate, delegateQueue: nil)
-        let uploadTask = session.uploadTask(request) { data, response, error in
-            completion?(data, response, error)
-        }
-        if let mock = session as? MockURLSession {
-            mock.delegate = delegate
-        }
+        let uploadTask = urlSession.uploadTask(request, completion)
         uploadTask.resume()
         return uploadTask
     }
