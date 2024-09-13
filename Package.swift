@@ -13,9 +13,9 @@ let local: [Package.Dependency] = [
 ]
 
 let remote: [Package.Dependency] = [
-    .package(url: "https://pubgi.sandpod.ir/chat/ios/chat-dto", from: "2.2.0"),
-    .package(url: "https://pubgi.sandpod.ir/chat/ios/additive", from: "1.2.3"),
-    .package(url: "https://pubgi.sandpod.ir/chat/ios/mocks", from: "1.2.4"),
+    .package(url: "https://pubgi.sandpod.ir/chat/ios/chat-dto", from: "2.2.1"),
+    .package(url: "https://pubgi.sandpod.ir/chat/ios/additive", from: "1.2.4"),
+    .package(url: "https://pubgi.sandpod.ir/chat/ios/mocks", from: "1.2.5"),
     .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.0.0"),
 ]
 
@@ -24,7 +24,7 @@ let package = Package(
     defaultLocalization: "en",
     platforms: [
         .iOS(.v10),
-        .macOS(.v12),
+        .macOS(.v10_13),
         .macCatalyst(.v13),
     ],
     products: [
